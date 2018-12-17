@@ -1,2 +1,3 @@
 import __builtin__
-from functions.mydba import *
+from functions.procedures import *
+from functions.passwords import *
