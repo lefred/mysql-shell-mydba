@@ -3,14 +3,26 @@ from mysqlsh import globals
 
 # see https://lefred.be/content/mysql-when-will-the-password-of-my-users-expire/
 
-def getPasswordExpiration():
+def getPasswordExpiration(show_expired=True):
     # Get the session and ensure it is connected
     if not globals.session.is_open():
         print("Please create a connection first.")
         return False
     session=globals.session
-    
-    stmt = """select concat(sys.quote_identifier(user),'@',sys.quote_identifier(host)), 
+    if show_expired:
+        stmt = """select concat(sys.quote_identifier(user),'@',sys.quote_identifier(host)), 
+              password_last_changed, IF((cast(
+              IFNULL(password_lifetime, @@default_password_lifetime) as signed)
+              + cast(datediff(password_last_changed, now()) as signed) > 0),
+              concat(
+               cast(
+              IFNULL(password_lifetime, @@default_password_lifetime) as signed)
+              + cast(datediff(password_last_changed, now()) as signed), ' days'), 'expired') expires_in
+              from mysql.user
+              where 
+              user not like 'mysql.%'"""
+    else:
+        stmt = """select concat(sys.quote_identifier(user),'@',sys.quote_identifier(host)), 
               password_last_changed,
               concat(
                cast(

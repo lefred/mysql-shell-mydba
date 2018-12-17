@@ -32,6 +32,7 @@ Current Functionalities:
 
 * **getProcedures() :** *list all routines (functions and/or procedures) for a specified schema*
 * **deleteProcedures() :** *delete all routines for a specified schema*
+* **getPasswordExpiration() :** *list the account that have a password that will expire (and expired)*
 
 
 Example:
