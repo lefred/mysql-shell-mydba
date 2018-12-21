@@ -35,14 +35,19 @@ def getDefaults(schema, table):
     session=globals.session
     defaults=__returnDefaults(session, schema, table)
 
-    fmt = "| {0:30s} | {1:15s} | {2:50s} | {3:20s} |"
+    fmt = "| {0:30s} | {1:15s} | {2:50s} | {3:25s} |"
     header = fmt.format("ColumnName","Type","Default","Example")
-    bar = "+" + "-" * 32 + "+" + "-" * 17 + "+" + "-" * 52 + "+" + "-" * 22 + "|"
+    bar = "+" + "-" * 32 + "+" + "-" * 17 + "+" + "-" * 52 + "+" + "-" * 27 + "|"
     print bar
     print header
     print bar
     for row in defaults:
-        query = session.sql("select {0}".format(row[2].replace('\\','')))
+        col_expr = row[2]
+        if col_expr is None:
+            col_expr=''
+        else:
+            col_expr = col_expr.replace('\\','')
+        query = session.sql("select {0}".format(col_expr))
         try:
             example = query.execute()
             for col in example.fetch_all():
