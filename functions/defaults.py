@@ -44,16 +44,19 @@ def getDefaults(schema, table):
     for row in defaults:
         col_expr = row[2]
         if col_expr is None:
-            col_expr=''
+            col_expr='NULL'
         else:
             col_expr = col_expr.replace('\\','')
         query = session.sql("select {0}".format(col_expr))
-        try:
-            example = query.execute()
-            for col in example.fetch_all():
-                ex_str=str(col[0])
-        except:
-            ex_str=row[2]
+        if col_expr == 'NULL':
+            ex_str = col_expr
+        else:
+            try:
+                example = query.execute()
+                for col in example.fetch_all():
+                    ex_str=str(col[0])
+            except:
+                ex_str=row[2]
         print fmt.format(row[0], row[1], row[2], ex_str)
     print bar
  
