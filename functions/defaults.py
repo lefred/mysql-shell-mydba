@@ -37,7 +37,7 @@ def getDefaults(schema, table):
 
     fmt = "| {0:30s} | {1:15s} | {2:50s} | {3:25s} |"
     header = fmt.format("ColumnName","Type","Default","Example")
-    bar = "+" + "-" * 32 + "+" + "-" * 17 + "+" + "-" * 52 + "+" + "-" * 27 + "|"
+    bar = "+" + "-" * 32 + "+" + "-" * 17 + "+" + "-" * 52 + "+" + "-" * 27 + "+"
     print bar
     print header
     print bar
